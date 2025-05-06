@@ -1,0 +1,556 @@
+{
+	"info": {
+		"_postman_id": "8f2d8abb-bc77-429d-bed2-905ed107c6bd",
+		"name": "PIP CI/CD Tests - DON'T CHANGE ME",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26369687",
+		"_collection_link": "https://bupadentalcare.postman.co/workspace/PIP-API~901092a1-b2c8-4d55-927e-08cc7fa98d2d/collection/9215421-8f2d8abb-bc77-429d-bed2-905ed107c6bd?action=share&source=collection_link&creator=26369687"
+	},
+	"item": [
+		{
+			"name": "PracticeInformation Access as Application",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.headers.add({\r",
+							"    key: 'api-key',\r",
+							"    value: pm.environment.get(\"PipApiPostmanApiKey\")\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if(pm.response.code == 200){\r",
+							"    pm.test(\"Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"if(pm.response.code == 401){\r",
+							"    pm.test(\"Error \"+pm.response.code, function () {\r",
+							"        pm.expect.fail(\"Access denied due to missing subscription key\");\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Response contains practices\", function(){\r",
+							"    pm.expect(pm.response.json()).to.have.property(\"practices\");\r",
+							"});\r",
+							"\r",
+							"//checks that the data returned is a JSON\r",
+							"pm.test(\"JSON array returned\", function(){\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.practices).to.be.an(\"array\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "source",
+						"value": "infra",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseUrl}}/{{Suffix}}/PracticeInformation",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"{{Suffix}}",
+						"PracticeInformation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PracticeInformation with practiceCode Identifier Access as Application",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.headers.add({\r",
+							"    key: 'api-key',\r",
+							"    value: pm.environment.get(\"PipApiPostmanApiKey\")\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if(pm.response.code == 200){\r",
+							"    pm.test(\"Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"if(pm.response.code == 401){\r",
+							"    pm.test(\"Error \"+pm.response.code, function () {\r",
+							"        pm.expect.fail(\"Access denied due to missing subscription key\");\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Response contains practices\", function(){\r",
+							"    pm.expect(pm.response.json()).to.have.property(\"practices\");\r",
+							"});\r",
+							"\r",
+							"//checks that the data returned is a JSON\r",
+							"pm.test(\"JSON array returned\", function(){\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.practices).to.be.an(\"array\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "source",
+						"value": "infra",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseUrl}}/{{Suffix}}/PracticeInformation?practiceCode=445",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"{{Suffix}}",
+						"PracticeInformation"
+					],
+					"query": [
+						{
+							"key": "practiceCode",
+							"value": "445"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PracticeInformation with practiceType Identifier Access as Application",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.headers.add({\r",
+							"    key: 'api-key',\r",
+							"    value: pm.environment.get(\"PipApiPostmanApiKey\")\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if(pm.response.code == 200){\r",
+							"    pm.test(\"Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"if(pm.response.code == 401){\r",
+							"    pm.test(\"Error \"+pm.response.code, function () {\r",
+							"        pm.expect.fail(\"Access denied due to missing subscription key\");\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Response contains practices\", function(){\r",
+							"    pm.expect(pm.response.json()).to.have.property(\"practices\");\r",
+							"});\r",
+							"\r",
+							"//checks that the data returned is a JSON\r",
+							"pm.test(\"JSON array returned\", function(){\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.practices).to.be.an(\"array\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "source",
+						"value": "infra",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseUrl}}/{{Suffix}}/PracticeInformation?practiceType=7",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"{{Suffix}}",
+						"PracticeInformation"
+					],
+					"query": [
+						{
+							"key": "practiceType",
+							"value": "7"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LabInformation Access as Application",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.headers.add({\r",
+							"    key: 'api-key',\r",
+							"    value: pm.environment.get(\"PipApiPostmanApiKey\")\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if(pm.response.code == 200){\r",
+							"    pm.test(\"Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"if(pm.response.code == 401){\r",
+							"    pm.test(\"Error \"+pm.response.code, function () {\r",
+							"        pm.expect.fail(\"Access denied due to missing subscription key\");\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Response contains labs\", function(){\r",
+							"    pm.expect(pm.response.json()).to.have.property(\"labs\");\r",
+							"});\r",
+							"\r",
+							"//checks that the data returned is a JSON\r",
+							"pm.test(\"JSON array returned\", function(){\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.labs).to.be.an(\"array\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "source",
+						"value": "infra",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseUrl}}/{{Suffix}}/LabInformation",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"{{Suffix}}",
+						"LabInformation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Division Access as Application",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.headers.add({\r",
+							"    key: 'api-key',\r",
+							"    value: pm.environment.get(\"PipApiPostmanApiKey\")\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if(pm.response.code == 200){\r",
+							"    pm.test(\"Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"if(pm.response.code == 401){\r",
+							"    pm.test(\"Error \"+pm.response.code, function () {\r",
+							"        pm.expect.fail(\"Access denied due to missing subscription key\");\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Response contains areas\", function(){\r",
+							"    pm.expect(pm.response.json()).to.have.property(\"areas\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains regions\", function(){\r",
+							"    pm.expect(pm.response.json()).to.have.property(\"regions\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"//checks that the data returned is a JSON\r",
+							"pm.test(\"JSON arrays returned\", function(){\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.areas).to.be.an(\"array\");\r",
+							"    pm.expect(jsonData.regions).to.be.an(\"array\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "source",
+						"value": "infra",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseUrl}}/{{Suffix}}/Division",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"{{Suffix}}",
+						"Division"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Practices CSV File Access as Application",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.headers.add({\r",
+							"    key: 'api-key',\r",
+							"    value: pm.environment.get(\"PipApiPostmanApiKey\")\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if(pm.response.code == 200){\r",
+							"    pm.test(\"Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"if(pm.response.code == 401){\r",
+							"    pm.test(\"Error \"+pm.response.code, function () {\r",
+							"        pm.expect.fail(\"Access denied due to missing subscription key\");\r",
+							"    });\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "source",
+						"value": "infra",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseUrl}}/{{Suffix}}/File/CSV/Practice",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"{{Suffix}}",
+						"File",
+						"CSV",
+						"Practice"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Labs CSV File Access as Application",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.headers.add({\r",
+							"    key: 'api-key',\r",
+							"    value: pm.environment.get(\"PipApiPostmanApiKey\")\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if(pm.response.code == 200){\r",
+							"    pm.test(\"Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"if(pm.response.code == 401){\r",
+							"    pm.test(\"Error \"+pm.response.code, function () {\r",
+							"        pm.expect.fail(\"Access denied due to missing subscription key\");\r",
+							"    });\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "source",
+						"value": "infra",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseUrl}}/{{Suffix}}/File/CSV/Lab",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"{{Suffix}}",
+						"File",
+						"CSV",
+						"Lab"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Excel File Access as Application",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.headers.add({\r",
+							"    key: 'api-key',\r",
+							"    value: pm.environment.get(\"PipApiPostmanApiKey\")\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if(pm.response.code == 200){\r",
+							"    pm.test(\"Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"if(pm.response.code == 401){\r",
+							"    pm.test(\"Error \"+pm.response.code, function () {\r",
+							"        pm.expect.fail(\"Access denied due to missing subscription key\");\r",
+							"    });\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "source",
+						"value": "infra",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseUrl}}/{{Suffix}}/File/Excel",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"{{Suffix}}",
+						"File",
+						"Excel"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

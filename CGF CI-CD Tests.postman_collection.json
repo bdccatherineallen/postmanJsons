@@ -1,0 +1,224 @@
+{
+	"info": {
+		"_postman_id": "fba1fe3a-d926-415a-a0de-41a98b726907",
+		"name": "CGF CI/CD Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26369687",
+		"_collection_link": "https://bupadentalcare.postman.co/workspace/CGF_Test~2eac9b40-0d9b-487a-9f33-1d3ca17d3a2c/collection/24487446-fba1fe3a-d926-415a-a0de-41a98b726907?action=share&source=collection_link&creator=26369687"
+	},
+	"item": [
+		{
+			"name": "Request JWT and Write to Variable",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"pm.test(\"Response body contains the property 'access_token'\", function () {\r",
+							"    pm.expect(jsonData).to.have.property(\"access_token\");\r",
+							"});\r",
+							"pm.environment.set(\"BearerToken\", jsonData.access_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "{{CgfApiClientID}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{CgfApiPostmanClientSecret}}",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "{{SVCPostmanUsername}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{SVCPostmanPassword}}",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "{{CgfApiClientID}}/.default",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://login.microsoftonline.com/{{BdcTenantID}}/oauth2/v2.0/token",
+					"protocol": "https",
+					"host": [
+						"login",
+						"microsoftonline",
+						"com"
+					],
+					"path": [
+						"{{BdcTenantID}}",
+						"oauth2",
+						"v2.0",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Published Audits",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code ==200;\r",
+							"\r",
+							"tests[\"Check response contains 'Per Clinician'\"] = responseBody.has(\"Per Clinician\");\r",
+							"\r",
+							"pm.test(\"check the Content-Type\", function(){\r",
+							"    pm.response.to.be.header(\"Content-Type\",\"application/json; charset=utf-8\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BaseUrl}}/Audit/PublishedAudits",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"Audit",
+						"PublishedAudits"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Published Clinical Standards",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code ==204;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BaseUrl}}/ClinicalStandard/GetPublishedClinicalStandards",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"ClinicalStandard",
+						"GetPublishedClinicalStandards"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Practices",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code ==200;\r",
+							"\r",
+							"tests[\"check status in the response\"]=responseBody.has(\"Ripon\");\r",
+							"tests[\"check name in the table\"]=responseBody.has(\"057\");\r",
+							"pm.test(\"check content -length\", function(){\r",
+							"    pm.response.to.be.header(\"Transfer-Encoding\",\"chunked\");});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BaseUrl}}/Practice",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"Practice"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.request.headers.add({",
+					"  key: \"api-key\",",
+					"  value: pm.variables.get(\"ApimCgfApiKey\")",
+					"});",
+					"pm.request.headers.add({",
+					"  key: \"Authorization\",",
+					"  value: \"Bearer \" + pm.variables.get(\"BearerToken\")",
+					"});"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

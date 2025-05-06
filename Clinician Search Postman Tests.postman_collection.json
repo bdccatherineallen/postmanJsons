@@ -1,0 +1,296 @@
+{
+	"info": {
+		"_postman_id": "a4cc98df-12db-43b2-ac4e-1f9da54c1690",
+		"name": "Clinician Search Postman Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26369687",
+		"_collection_link": "https://bupadentalcare.postman.co/workspace/Clinician-Search~a6bd3868-cb02-49f4-aae7-06beda595de7/collection/9215421-a4cc98df-12db-43b2-ac4e-1f9da54c1690?action=share&source=collection_link&creator=26369687"
+	},
+	"item": [
+		{
+			"name": "Specialties",
+			"item": [
+				{
+					"name": "GetSpecialties 200",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const schema = {\r",
+									"    \"type\" : \"array\",\r",
+									"    \"items\":  JSON.parse(pm.globals.get(\"specialtiesSchema\"))\r",
+									"}\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"  pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"// pm.test(\"Response time is less than 2000ms\", () => {\r",
+									"//   pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+									"// });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}api/specialty/specialties",
+							"host": [
+								"{{BaseUrl}}api"
+							],
+							"path": [
+								"specialty",
+								"specialties"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Clinicians",
+			"item": [
+				{
+					"name": "GetClininicianByPostcode",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const schema = {\r",
+									"    \"type\" : \"array\",\r",
+									"    \"items\":  JSON.parse(pm.globals.get(\"clinicianSearchSchema\"))\r",
+									"}\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"  pm.response.to.have.jsonSchema(schema);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}api/clinician/clinicians-by-postcode?specialtyKey=18&radiusInMiles=25&longitude=-2.349790&latitude=52.388800",
+							"host": [
+								"{{BaseUrl}}api"
+							],
+							"path": [
+								"clinician",
+								"clinicians-by-postcode"
+							],
+							"query": [
+								{
+									"key": "specialtyKey",
+									"value": "18"
+								},
+								{
+									"key": "radiusInMiles",
+									"value": "25"
+								},
+								{
+									"key": "longitude",
+									"value": "-2.349790"
+								},
+								{
+									"key": "latitude",
+									"value": "52.388800"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Graph QL",
+			"item": [
+				{
+					"name": "GetDimCompetencyByKey",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Check response has competency property', () => {\r",
+									"    const jsonBody = pm.response.json();\r",
+									"\r",
+									"    jsonBody.data.dimCompetency.forEach(function(competency) {\r",
+									"        pm.expect(competency).to.have.property(\"competency\");\r",
+									"    });\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/graphql",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetDimCompetencyByKey($competencyKey: Int) {\r\n  dimCompetency (where: { competencyKey: { eq: $competencyKey} }) {\r\n    competency\r\n  }\r\n}",
+								"variables": "{\r\n  \"competencyKey\": 1\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}api/graphql/",
+							"host": [
+								"{{BaseUrl}}api"
+							],
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetDimPracticeByKey",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Check response has practiceName property', () => {\r",
+									"    const jsonBody = pm.response.json();\r",
+									"\r",
+									"    jsonBody.data.dimPractice.forEach(function(practice) {\r",
+									"        pm.expect(practice).to.have.property(\"practiceName\");\r",
+									"    });\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/graphql",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetDimPracticeByKey($practiceKey: Int) {\r\n  dimPractice (where: { practiceKey: { eq: $practiceKey } }) {\r\n    practiceName\r\n  }\r\n}\r\n",
+								"variables": "{\r\n  \"practiceKey\": 105\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}api/graphql/",
+							"host": [
+								"{{BaseUrl}}api"
+							],
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetDimStaffByKey",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Check response has practiceName property', () => {\r",
+									"    const jsonBody = pm.response.json();\r",
+									"\r",
+									"    jsonBody.data.dimStaff.forEach(function(dimStaff) {\r",
+									"        pm.expect(dimStaff).to.have.property(\"fullName\");\r",
+									"    });\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/graphql",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetDimStaffByKey($staffKey: Int!) {\r\n  dimStaff (where: { staffKey: { eq: $staffKey } }) {\r\n    fullName\r\n  }\r\n}",
+								"variables": "{\r\n  \"staffKey\": 32362\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}api/graphql/",
+							"host": [
+								"{{BaseUrl}}api"
+							],
+							"path": [
+								"graphql",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
